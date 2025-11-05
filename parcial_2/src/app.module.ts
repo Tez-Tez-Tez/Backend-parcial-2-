@@ -7,13 +7,18 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration from './config/configuration'
 import {TypeOrmModule} from '@nestjs/typeorm'
 import { AuthModule } from './auth/auth.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
-  imports: [UsuariosModule, TicketsModule,ConfigModule.forRoot({
+  imports: [
+    UsuariosModule,
+    TicketsModule,
+    ConfigModule.forRoot({
     isGlobal:true,
     envFilePath:'.env',
     load:[configuration]
-  }),TypeOrmModule.forRootAsync({
+    }),
+    TypeOrmModule.forRootAsync({
     imports:[ConfigModule],
     inject:[ConfigService],
     useFactory: (config : ConfigService)=>{
@@ -32,7 +37,10 @@ import { AuthModule } from './auth/auth.module';
           logging:false
       }
     }
-  }), AuthModule],
+    }),
+    AuthModule,
+    MailModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

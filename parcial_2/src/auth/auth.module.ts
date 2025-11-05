@@ -8,16 +8,22 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsuarioEntity } from '../usuarios/entity/usuarios.entity';
 import { UsuariosService } from '../usuarios/usuarios.service';
+import { MailModule } from '../mail/mail.module';
 
 @Module({
-  imports:[PassportModule,TypeOrmModule.forFeature([UsuarioEntity]),JwtModule.registerAsync({
-    imports:[ConfigModule],
-    inject:[ConfigService],
-    useFactory: async(config : ConfigService)=>({
-      secret: config.get('config.jwt'),
-      signOptions: {expiresIn:'1h'}
-    })
-  })],
+  imports:[
+    PassportModule,
+    TypeOrmModule.forFeature([UsuarioEntity]),
+    JwtModule.registerAsync({
+      imports:[ConfigModule],
+      inject:[ConfigService],
+      useFactory: async(config : ConfigService)=>({
+        secret: config.get('config.jwt'),
+        signOptions: {expiresIn:'1h'}
+      })
+    }),
+    MailModule
+  ],
   controllers: [AuthController],
   providers: [AuthService,UsuariosService,JwtStrategy]
 })

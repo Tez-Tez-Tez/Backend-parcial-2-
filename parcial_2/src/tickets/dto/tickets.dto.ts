@@ -1,5 +1,6 @@
 import { IsEnum, IsInt, IsNotEmpty, IsOptional, IsString } from "class-validator";
 import { Estado, Prioridad } from "../entity/tickets.entity";
+import { EmptyToUndefined } from "../../common/decorators/empty-to-undefined.decorator";
 
 export class TicketsCreateDTO{
         @IsString()
@@ -13,21 +14,20 @@ export class TicketsCreateDTO{
         @IsNotEmpty()
         @IsEnum(Prioridad)
         prioridad!: Prioridad;
-    
-        @IsInt()
-        @IsNotEmpty()
-        id_usuario!: number;
+
 }
 
 export class TicketsUpdateDTO{
         @IsString()
         @IsNotEmpty()
         @IsOptional()
+        @EmptyToUndefined()
         asunto?: string;
     
         @IsNotEmpty()
         @IsString()
         @IsOptional()
+        @EmptyToUndefined()
         descripcion?: string;
     
         @IsNotEmpty()

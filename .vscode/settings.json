@@ -1,0 +1,4 @@
+{
+    "github.copilot.chat.edits.suggestRelatedFilesForTests": false,
+    "github.copilot.chat.edits.suggestRelatedFilesFromGitHistory": false
+}

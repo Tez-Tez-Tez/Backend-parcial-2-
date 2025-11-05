@@ -1,17 +1,29 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsuarioEntity } from './entity/usuarios.entity';
 import { Repository } from 'typeorm';
 import { UsuarioCreateDTO } from './dto/usuarios.dto';
+import { MailService } from '../mail/mail.service';
 
 @Injectable()
 export class UsuariosService {
-    constructor(@InjectRepository(UsuarioEntity)private usuarioRepo : Repository<UsuarioEntity>){}
+        private readonly logger = new Logger(UsuariosService.name);
+        constructor(@InjectRepository(UsuarioEntity)private usuarioRepo : Repository<UsuarioEntity>,
+            private mailService: MailService){}
     
     async crear(dto:UsuarioCreateDTO){
-        const newuser = await this.usuarioRepo.create(dto);
-        const user = await this.usuarioRepo.save(newuser)
-        return user;
+                const newuser = await this.usuarioRepo.create(dto);
+                const user = await this.usuarioRepo.save(newuser)
+
+                try{
+                    if(user.email){
+                        await this.mailService.sendWelcome(user.email, { name: user.nombre ?? user.nombreUsuario });
+                    }
+                }catch(err){
+                    this.logger.warn('No se pudo enviar email de bienvenida', err as any);
+                }
+
+                return user;
     }
 
     async getId (id:number){

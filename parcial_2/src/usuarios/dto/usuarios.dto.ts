@@ -1,5 +1,6 @@
 import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, MinLength } from "class-validator";
 import { Estado, Roles } from "../entity/usuarios.entity";
+import { EmptyToUndefined } from "../../common/decorators/empty-to-undefined.decorator";
 
 export class UsuarioCreateDTO{
 
@@ -28,48 +29,45 @@ export class UsuarioCreateDTO{
     password!: string;
     
     @IsOptional()
-    @IsNotEmpty()
     @IsEnum(Roles)
     rol?: Roles;
 }
 
 export class UsuarioUpdateDTO{
+    @EmptyToUndefined()
     @IsString()
-    @IsNotEmpty()
     @IsOptional()
     @MinLength(3)
     nombre?: string;
 
     @IsString()
-    @IsNotEmpty()
+    @EmptyToUndefined()
     @IsOptional()
     @MinLength(3)
     apellido?: string;
 
     @IsString()
-    @IsNotEmpty()
+    @EmptyToUndefined()
     @IsOptional()
     @MinLength(3)
     nombreUsuario?: string;
 
     @IsEmail()
-    @IsNotEmpty()
+    @EmptyToUndefined()
     @IsOptional()
     email?: string;
 
     @IsString()
-    @IsNotEmpty()
+    @EmptyToUndefined()
     @IsOptional()
     @MinLength(6)
     password?: string;
 
     @IsEnum(Estado)
-    @IsNotEmpty()
     @IsOptional()
     estado?: Estado;
 
     @IsEnum(Roles)
-    @IsNotEmpty()
     @IsOptional()
     rol?:Roles;
 }

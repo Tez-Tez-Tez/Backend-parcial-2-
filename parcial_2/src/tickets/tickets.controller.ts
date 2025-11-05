@@ -12,7 +12,7 @@ export class TicketsController {
 
     @Post()
     async create(@Body()dto:TicketsCreateDTO,@Req()req: any){
-        return this.service.create({...dto,id_usuario:req.user.id})
+        return this.service.create(dto,req.user.id)
     }
 
     @Get()
